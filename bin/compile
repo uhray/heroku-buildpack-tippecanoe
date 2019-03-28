@@ -8,7 +8,7 @@ echo "-----> Installing tippecanoe"
 BUILD_DIR=$1
 
 dep_url=git@github.com:mapbox/tippecanoe.git
-tippecanoe_dir=cphalcon
+tippecanoe_dir=tippecanoe
 git clone $dep_url -q
 if [ ! -d "$tippecanoe_dir" ]; then
   echo "[ERROR] Failed to find tippecanoe directory $tippecanoe_dir"
