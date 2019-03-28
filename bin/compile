@@ -7,7 +7,7 @@ indent() {
 echo "-----> Installing tippecanoe"
 BUILD_DIR=$1
 
-dep_url=git@github.com:mapbox/tippecanoe.git
+dep_url=https://github.com/mapbox/tippecanoe.git
 tippecanoe_dir=tippecanoe
 git clone $dep_url -q
 if [ ! -d "$tippecanoe_dir" ]; then
