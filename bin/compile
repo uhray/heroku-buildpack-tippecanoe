@@ -1,0 +1,22 @@
+#!/bin/sh
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Installing tippecanoe"
+BUILD_DIR=$1
+
+dep_url=git@github.com:mapbox/tippecanoe.git
+tippecanoe_dir=cphalcon
+git clone $dep_url -q
+if [ ! -d "$tippecanoe_dir" ]; then
+  echo "[ERROR] Failed to find tippecanoe directory $tippecanoe_dir"
+  exit
+fi
+
+echo "Installing"
+
+cd $tippecanoe_dir
+make -j
+make install
