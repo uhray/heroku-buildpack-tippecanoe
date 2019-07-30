@@ -1,22 +1,50 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-indent() {
-  sed -u 's/^/       /'
-}
+set -eo pipefail
 
-echo "-----> Installing tippecanoe"
+# debug
+# set -x
+
 BUILD_DIR=$1
 
-dep_url=https://github.com/mapbox/tippecanoe.git
-tippecanoe_dir=tippecanoe
-git clone $dep_url -q
-if [ ! -d "$tippecanoe_dir" ]; then
-  echo "[ERROR] Failed to find tippecanoe directory $tippecanoe_dir"
-  exit
-fi
+WORK_DIR=$BUILD_DIR/.tippecanoe
+mkdir -p $WORK_DIR
 
-echo "Installing"
+INSTALL_DIR=$BUILD_DIR/vendor
+mkdir -p $INSTALL_DIR
 
-cd $tippecanoe_dir
-make -j
-make install
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+
+function topic() {
+  echo "-----> $*"
+}
+
+topic "Fetching build dependencies"
+
+sudo apt-get install libsqlite3-dev
+
+topic "Downloading tippecanoe"
+
+DEP_URL=https://github.com/mapbox/tippecanoe.git
+VERSION="1.34.3"
+
+git clone --depth 1 --branch $VERSION $DEP_URL $WORK_DIR -q
+
+topic "Compiling tippecanoe binary"
+
+cd $WORK_DIR
+make -j tippecanoe | indent
+
+topic "Installing tippecanoe binary"
+
+# we can't `make install` because it assumes writable `/usr/local`
+# also we don't need the other binaries this compiles
+
+cp $WORK_DIR/tippecanoe $INSTALL_DIR
+rm -r $WORK_DIR
