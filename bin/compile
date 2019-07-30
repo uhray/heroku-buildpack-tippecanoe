@@ -1,22 +1,36 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-indent() {
-  sed -u 's/^/       /'
-}
+set -eo pipefail
 
-echo "-----> Installing tippecanoe"
+# debug
+# set -x
+
 BUILD_DIR=$1
 
-dep_url=https://github.com/mapbox/tippecanoe.git
-tippecanoe_dir=tippecanoe
-git clone $dep_url -q
-if [ ! -d "$tippecanoe_dir" ]; then
-  echo "[ERROR] Failed to find tippecanoe directory $tippecanoe_dir"
-  exit
-fi
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
 
-echo "Installing"
+function topic() {
+  echo "-----> $*"
+}
+
+topic "Downloading tippecanoe"
+
+tippecanoe_dir="$BUILD_DIR/tippecanoe"
+mkdir -p $tippecanoe_dir
+
+dep_url=https://github.com/mapbox/tippecanoe.git
+git clone $dep_url $tippecanoe_dir -q | ident
+
+topic "Compiling tippecanoe"
 
 cd $tippecanoe_dir
-make -j
+make -j | ident
+
+topic "Installing tippecanoe"
 make install
