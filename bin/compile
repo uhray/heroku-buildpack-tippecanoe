@@ -7,6 +7,12 @@ set -eo pipefail
 
 BUILD_DIR=$1
 
+WORK_DIR=$BUILD_DIR/.tippecanoe
+mkdir -p $WORK_DIR
+
+INSTALL_DIR=$BUILD_DIR/vendor
+mkdir -p $INSTALL_DIR
+
 function indent() {
   c='s/^/       /'
   case $(uname) in
@@ -19,18 +25,26 @@ function topic() {
   echo "-----> $*"
 }
 
+topic "Fetching build dependencies"
+
+sudo apt-get install libsqlite3-dev
+
 topic "Downloading tippecanoe"
 
-tippecanoe_dir="$BUILD_DIR/tippecanoe"
-mkdir -p $tippecanoe_dir
+DEP_URL=https://github.com/mapbox/tippecanoe.git
+VERSION="1.34.3"
 
-dep_url=https://github.com/mapbox/tippecanoe.git
-git clone $dep_url $tippecanoe_dir -q | ident
+git clone --depth 1 --branch $VERSION $DEP_URL $WORK_DIR -q
 
-topic "Compiling tippecanoe"
+topic "Compiling tippecanoe binary"
 
-cd $tippecanoe_dir
-make -j | ident
+cd $WORK_DIR
+make -j tippecanoe | indent
 
-topic "Installing tippecanoe"
-make install
+topic "Installing tippecanoe binary"
+
+# we can't `make install` because it assumes writable `/usr/local`
+# also we don't need the other binaries this compiles
+
+cp $WORK_DIR/tippecanoe $INSTALL_DIR
+rm -r $WORK_DIR
