@@ -27,7 +27,7 @@ function topic() {
 
 topic "Fetching build dependencies"
 
-sudo apt-get install libsqlite3-dev
+apt-get install libsqlite3-dev
 
 topic "Downloading tippecanoe"
 
