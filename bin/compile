@@ -1,24 +1,8 @@
 #!/usr/bin/env bash
-
 set -eo pipefail
 
 # debug
-set -x
-
-BUILD_DIR=$(cd -- "$1" && pwd)
-
-DEP_URL=https://github.com/mapbox/tippecanoe.git
-VERSION_FILE=.tippecanoe-version
-VERSION=master
-
-if test -f "$VERSION_FILE"; then
-  VERSION=$(<$VERSION_FILE)
-fi
-
-DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
-
-WORK_DIR=$BUILD_DIR/.tippecanoe
-mkdir -p $WORK_DIR
+#set -x
 
 function topic() {
   echo "-----> $*"
@@ -27,6 +11,22 @@ function topic() {
 function step() {
   echo "=== $*"
 }
+
+BUILD_DIR=$(cd -- "$1" && pwd)
+
+DEP_URL=https://github.com/mapbox/tippecanoe.git
+VERSION_FILE=$BUILD_DIR/.tippecanoe-version
+VERSION=master
+
+if test -f "$VERSION_FILE"; then
+  VERSION=$(<$VERSION_FILE)
+  step "Detected pinned version file; setting desired version to $VERSION"
+fi
+
+DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
+
+WORK_DIR=$BUILD_DIR/.tippecanoe
+mkdir -p $WORK_DIR
 
 topic "Installing tippecanoe $VERSION"
 step "Downloading from github"
