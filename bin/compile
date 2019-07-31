@@ -3,12 +3,19 @@
 set -eo pipefail
 
 # debug
-# set -x
+set -x
 
-BUILD_DIR=$1
+BUILD_DIR=$(cd -- "$1" && pwd)
 
 DEP_URL=https://github.com/mapbox/tippecanoe.git
-VERSION="1.34.3"
+VERSION_FILE=.tippecanoe-version
+VERSION=master
+
+if test -f "$VERSION_FILE"; then
+  VERSION=$(<$VERSION_FILE)
+fi
+
+DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
 
 WORK_DIR=$BUILD_DIR/.tippecanoe
 mkdir -p $WORK_DIR
@@ -21,14 +28,15 @@ function step() {
   echo "=== $*"
 }
 
-topic "Installing tippecanoe"
+topic "Installing tippecanoe $VERSION"
 step "Downloading from github"
 
-git clone --depth 1 --branch $VERSION $DEP_URL $WORK_DIR -q
+git clone --depth 1 $DOWNLOAD_CMD $WORK_DIR -q
 
 step "Compiling binaries"
 
-cd $WORK_DIR
+pushd $WORK_DIR
+
 make -j
 
 step "Installing binaries to vendor"
@@ -38,6 +46,9 @@ step "Installing binaries to vendor"
 # man output.
 
 make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR
-rm -r $WORK_DIR
+
+popd
+
+rm -rf $WORK_DIR
 
 step "Tippecanoe installation done."
