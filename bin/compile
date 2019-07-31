@@ -20,7 +20,6 @@ VERSION=master
 
 if test -f "$VERSION_FILE"; then
   VERSION=$(<$VERSION_FILE)
-  step "Detected pinned version file; setting desired version to $VERSION"
 fi
 
 DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
@@ -37,7 +36,7 @@ step "Compiling binaries"
 
 pushd $WORK_DIR
 
-make -j
+make -j > /dev/null
 
 step "Installing binaries to vendor"
 
@@ -45,7 +44,7 @@ step "Installing binaries to vendor"
 # during slug compilation. Instead, write everything to /app/bin and blackhole
 # man output.
 
-make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR
+make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR > /dev/null
 
 popd
 
