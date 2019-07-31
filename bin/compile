@@ -7,11 +7,11 @@ set -eo pipefail
 
 BUILD_DIR=$1
 
+DEP_URL=https://github.com/mapbox/tippecanoe.git
+VERSION="1.34.3"
+
 WORK_DIR=$BUILD_DIR/.tippecanoe
 mkdir -p $WORK_DIR
-
-INSTALL_DIR=$BUILD_DIR/vendor
-mkdir -p $INSTALL_DIR
 
 function topic() {
   echo "-----> $*"
@@ -24,22 +24,20 @@ function step() {
 topic "Installing tippecanoe"
 step "Downloading from github"
 
-DEP_URL=https://github.com/mapbox/tippecanoe.git
-VERSION="1.34.3"
-
 git clone --depth 1 --branch $VERSION $DEP_URL $WORK_DIR -q
 
-step "Compiling binary"
+step "Compiling binaries"
 
 cd $WORK_DIR
-make -j tippecanoe
+make -j
 
-step "Installing binary to vendor"
+step "Installing binaries to vendor"
 
-# we can't `make install` because it assumes writable `/usr/local`
-# also we don't need the other binaries this compiles
+# Default `make install` assumes writable /usr/local, which is not true
+# during slug compilation. Instead, write everything to /app/bin and blackhole
+# man output.
 
-cp $WORK_DIR/tippecanoe $INSTALL_DIR
+make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR
 rm -r $WORK_DIR
 
 step "Tippecanoe installation done."
