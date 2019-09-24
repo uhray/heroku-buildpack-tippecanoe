@@ -36,7 +36,8 @@ step "Compiling binaries"
 
 pushd $WORK_DIR
 
-make -j > /dev/null
+CUSTOM_LDFLAGS="-ldl"
+make -j LDFLAGS=$CUSTOM_LDFLAGS > /dev/null
 
 step "Installing binaries to vendor"
 
