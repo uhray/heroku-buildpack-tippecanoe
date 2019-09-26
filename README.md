@@ -4,12 +4,12 @@ This buildpack clones, compiles, and installs Mapbox's [Tippecanoe](https://gith
 
 ## Configuration
 
-Add a `.tippecanoe-version` file to the source directory of your application to pin the version of tippecanoe that gets installed. If not specified, this buildpack will install the HEAD version of tippecanoe.
+Add a `.tippecanoe-version` file to the source directory of your application to pin the repository and branch of tippecanoe that gets installed. If not specified, this buildpack will install the HEAD version of mainline tippecanoe.
 
 Example `.tippecanoe-version` file:
 
 ```sh
-1.34.3
+--branch 1.34.3 https://github.com/mapbox/tippecanoe.git
 ```
 
 ## Installation

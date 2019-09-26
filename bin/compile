@@ -14,15 +14,13 @@ function step() {
 
 BUILD_DIR=$(cd -- "$1" && pwd)
 
-DEP_URL=https://github.com/mapbox/tippecanoe.git
-VERSION_FILE=$BUILD_DIR/.tippecanoe-version
-VERSION=master
 
-if test -f "$VERSION_FILE"; then
-  VERSION=$(<$VERSION_FILE)
+DOWNLOAD_CMD="https://github.com/mapbox/tippecanoe.git"
+
+SOURCE_OVERRIDE=$BUILD_DIR/.tippecanoe-version
+if test -f "$SOURCE_OVERRIDE"; then
+  DOWNLOAD_CMD=$(<$SOURCE_OVERRIDE)
 fi
-
-DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
 
 WORK_DIR=$BUILD_DIR/.tippecanoe
 mkdir -p $WORK_DIR
