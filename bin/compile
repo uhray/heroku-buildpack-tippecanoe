@@ -14,7 +14,7 @@ function step() {
 
 BUILD_DIR=$(cd -- "$1" && pwd)
 
-DEP_URL=https://github.com/mapbox/tippecanoe.git
+DEP_URL=https://github.com/meganrm/tippecanoe.git
 VERSION_FILE=$BUILD_DIR/.tippecanoe-version
 VERSION=master
 
