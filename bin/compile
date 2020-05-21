@@ -14,7 +14,7 @@ function step() {
 
 BUILD_DIR=$(cd -- "$1" && pwd)
 
-DEP_URL=https://github.com/uhray/tippecanoe.git
+DEP_URL=https://github.com/mapbox/tippecanoe.git
 VERSION_FILE=$BUILD_DIR/.tippecanoe-version
 VERSION=master
 
@@ -27,7 +27,7 @@ DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
 WORK_DIR=$BUILD_DIR/.tippecanoe
 mkdir -p $WORK_DIR
 
-topic "Installing uhray/tippecanoe $VERSION"
+topic "Installing mapbox/tippecanoe $VERSION"
 step "Downloading from github"
 
 git clone --depth 1 $DOWNLOAD_CMD $WORK_DIR -q
