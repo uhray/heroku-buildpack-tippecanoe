@@ -27,7 +27,7 @@ DOWNLOAD_CMD="--branch $VERSION $DEP_URL"
 WORK_DIR=$BUILD_DIR/.tippecanoe
 mkdir -p $WORK_DIR
 
-topic "Installing tippecanoe $VERSION"
+topic "Installing uhray/tippecanoe $VERSION"
 step "Downloading from github"
 
 git clone --depth 1 $DOWNLOAD_CMD $WORK_DIR -q
