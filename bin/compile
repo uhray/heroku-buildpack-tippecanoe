@@ -37,12 +37,12 @@ step "Compiling binaries"
 pushd $WORK_DIR
 
 export CXX=g++-5
-export CXXFLAGS=-ldl
+export LDFLAGS=-ldl
 
 echo CXX $CXX
 echo CXXFLAGS $CXXFLAGS
 
-make -j > /dev/null
+make -j 
 
 step "Installing binaries to vendor"
 
@@ -50,7 +50,7 @@ step "Installing binaries to vendor"
 # during slug compilation. Instead, write everything to /app/bin and blackhole
 # man output.
 
-make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR > /dev/null
+make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR 
 
 popd
 
