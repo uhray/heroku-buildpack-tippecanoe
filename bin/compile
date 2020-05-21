@@ -36,15 +36,17 @@ step "Compiling binaries"
 
 pushd $WORK_DIR
 
-make -j > /dev/null
+# make -j > /dev/null
 
-step "Installing binaries to vendor"
+# step "Installing binaries to vendor"
 
 # Default `make install` assumes writable /usr/local, which is not true
 # during slug compilation. Instead, write everything to /app/bin and blackhole
 # man output.
 
-make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR > /dev/null
+#make install PREFIX=$BUILD_DIR MANDIR=$WORK_DIR > /dev/null
+
+make install
 
 popd
 
