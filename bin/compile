@@ -40,9 +40,9 @@ export CXX=g++-5
 export LDFLAGS=-ldl
 
 echo CXX $CXX
-echo CXXFLAGS $CXXFLAGS
+echo LDFLAGS $LDFLAGS
 
-make -j 
+# make -j 
 
 step "Installing binaries to vendor"
 
